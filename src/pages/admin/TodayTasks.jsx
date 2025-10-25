@@ -1,207 +1,218 @@
-import React, { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import { Search } from "lucide-react";
 
 // Employee data
 const employees = [
   {
-    id: 'emp-001',
-    name: 'Pratap Kumar',
-    email: 'pratap@company.com',
-    image: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Engineering',
-    designation: 'CRM'
+    id: "emp-001",
+    name: "Pratap Kumar",
+    email: "pratap@company.com",
+    image:
+      "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Engineering",
+    designation: "CRM",
   },
   {
-    id: 'emp-002',
-    name: 'Chetan Sharma',
-    email: 'chetan@company.com',
-    image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Design',
-    designation: 'PURCHASE'
+    id: "emp-002",
+    name: "Chetan Sharma",
+    email: "chetan@company.com",
+    image:
+      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Design",
+    designation: "PURCHASE",
   },
   {
-    id: 'emp-003',
-    name: 'Digendra Patel',
-    email: 'digendra@company.com',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Marketing',
-    designation: 'HR'
+    id: "emp-003",
+    name: "Digendra Patel",
+    email: "digendra@company.com",
+    image:
+      "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Marketing",
+    designation: "HR",
   },
   {
-    id: 'emp-004',
-    name: 'Durgesh Gupta',
-    email: 'durgesh@company.com',
-    image: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Sales',
-    designation: 'EA'
+    id: "emp-004",
+    name: "Durgesh Gupta",
+    email: "durgesh@company.com",
+    image:
+      "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Sales",
+    designation: "EA",
   },
   {
-    id: 'emp-005',
-    name: 'Vikash Singh',
-    email: 'vikash@company.com',
-    image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Engineering',
-    designation: 'ACCOUNTANT'
+    id: "emp-005",
+    name: "Vikash Singh",
+    email: "vikash@company.com",
+    image:
+      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Engineering",
+    designation: "ACCOUNTANT",
   },
   {
-    id: 'emp-006',
-    name: 'Anubhav Kumar',
-    email: 'anubhav@company.com',
-    image: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'IT',
-    designation: 'CRM'
+    id: "emp-006",
+    name: "Anubhav Kumar",
+    email: "anubhav@company.com",
+    image:
+      "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "IT",
+    designation: "CRM",
   },
   {
-    id: 'emp-007',
-    name: 'Muzammil Ahmed',
-    email: 'muzammil@company.com',
-    image: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'Operations',
-    designation: 'PURCHASE'
+    id: "emp-007",
+    name: "Muzammil Ahmed",
+    email: "muzammil@company.com",
+    image:
+      "https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "Operations",
+    designation: "PURCHASE",
   },
   {
-    id: 'emp-008',
-    name: 'Pooja Verma',
-    email: 'pooja@company.com',
-    image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=600',
-    department: 'HR',
-    designation: 'HR'
-  }
+    id: "emp-008",
+    name: "Pooja Verma",
+    email: "pooja@company.com",
+    image:
+      "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=600",
+    department: "HR",
+    designation: "HR",
+  },
 ];
 
 // Task data with employee references
 const tasks = [
   {
-    id: 'task-001',
-    fmsName: 'Project Alpha',
-    taskName: 'Frontend Development',
-    assignedTo: 'emp-001',
-    todayTaskCount: 12
+    id: "task-001",
+    fmsName: "Project Alpha",
+    taskName: "Frontend Development",
+    assignedTo: "emp-001",
+    todayTaskCount: 12,
   },
   {
-    id: 'task-002',
-    fmsName: 'Project Beta',
-    taskName: 'UI Design',
-    assignedTo: 'emp-002',
-    todayTaskCount: 8
+    id: "task-002",
+    fmsName: "Project Beta",
+    taskName: "UI Design",
+    assignedTo: "emp-002",
+    todayTaskCount: 8,
   },
   {
-    id: 'task-003',
-    fmsName: 'Project Gamma',
-    taskName: 'Marketing Campaign',
-    assignedTo: 'emp-003',
-    todayTaskCount: 15
+    id: "task-003",
+    fmsName: "Project Gamma",
+    taskName: "Marketing Campaign",
+    assignedTo: "emp-003",
+    todayTaskCount: 15,
   },
   {
-    id: 'task-004',
-    fmsName: 'Project Delta',
-    taskName: 'Sales Presentation',
-    assignedTo: 'emp-004',
-    todayTaskCount: 6
+    id: "task-004",
+    fmsName: "Project Delta",
+    taskName: "Sales Presentation",
+    assignedTo: "emp-004",
+    todayTaskCount: 6,
   },
   {
-    id: 'task-005',
-    fmsName: 'Project Epsilon',
-    taskName: 'Backend Development',
-    assignedTo: 'emp-005',
-    todayTaskCount: 20
+    id: "task-005",
+    fmsName: "Project Epsilon",
+    taskName: "Backend Development",
+    assignedTo: "emp-005",
+    todayTaskCount: 20,
   },
   {
-    id: 'task-006',
-    fmsName: 'Project Zeta',
-    taskName: 'Quality Assurance',
-    assignedTo: 'emp-006',
-    todayTaskCount: 18
+    id: "task-006",
+    fmsName: "Project Zeta",
+    taskName: "Quality Assurance",
+    assignedTo: "emp-006",
+    todayTaskCount: 18,
   },
   {
-    id: 'task-007',
-    fmsName: 'Project Eta',
-    taskName: 'Documentation',
-    assignedTo: 'emp-007',
-    todayTaskCount: 10
+    id: "task-007",
+    fmsName: "Project Eta",
+    taskName: "Documentation",
+    assignedTo: "emp-007",
+    todayTaskCount: 10,
   },
   {
-    id: 'task-008',
-    fmsName: 'Project Theta',
-    taskName: 'HR Process',
-    assignedTo: 'emp-008',
-    todayTaskCount: 14
+    id: "task-008",
+    fmsName: "Project Theta",
+    taskName: "HR Process",
+    assignedTo: "emp-008",
+    todayTaskCount: 14,
   },
   {
-    id: 'task-009',
-    fmsName: 'Checklist & Delegation',
-    taskName: 'Checklist Task-Afroj Begam',
-    assignedTo: 'emp-001',
-    todayTaskCount: 25
+    id: "task-009",
+    fmsName: "Checklist & Delegation",
+    taskName: "Checklist Task-Afroj Begam",
+    assignedTo: "emp-001",
+    todayTaskCount: 25,
   },
   {
-    id: 'task-010',
-    fmsName: 'OTD V.2-HTML',
-    taskName: 'Audit',
-    assignedTo: 'emp-002',
-    todayTaskCount: 32
+    id: "task-010",
+    fmsName: "OTD V.2-HTML",
+    taskName: "Audit",
+    assignedTo: "emp-002",
+    todayTaskCount: 32,
   },
   {
-    id: 'task-011',
-    fmsName: 'Checklist & Delegation',
-    taskName: 'Checklist Task-Amlan Dikshit',
-    assignedTo: 'emp-003',
-    todayTaskCount: 23
+    id: "task-011",
+    fmsName: "Checklist & Delegation",
+    taskName: "Checklist Task-Amlan Dikshit",
+    assignedTo: "emp-003",
+    todayTaskCount: 23,
   },
   {
-    id: 'task-012',
-    fmsName: 'OTD V.2-HTML',
-    taskName: 'Billing',
-    assignedTo: 'emp-004',
-    todayTaskCount: 19
-  }
+    id: "task-012",
+    fmsName: "OTD V.2-HTML",
+    taskName: "Billing",
+    assignedTo: "emp-004",
+    todayTaskCount: 19,
+  },
 ];
 
 const AdminTodayTasks = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [personFilter, setPersonFilter] = useState('all');
-  const [fmsFilter, setFmsFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [personFilter, setPersonFilter] = useState("all");
+  const [fmsFilter, setFmsFilter] = useState("all");
 
   // Get employee by ID
   const getEmployee = (employeeId) => {
-    return employees.find(emp => emp.id === employeeId);
+    return employees.find((emp) => emp.id === employeeId);
   };
 
   // Enrich tasks with employee data
   const enrichedTasks = useMemo(() => {
-    return tasks.map(task => {
+    return tasks.map((task) => {
       const employee = getEmployee(task.assignedTo);
       return {
         ...task,
-        personName: employee?.name || 'Unknown',
-        personImage: employee?.image || '',
-        department: employee?.department || 'N/A'
+        personName: employee?.name || "Unknown",
+        personImage: employee?.image || "",
+        department: employee?.department || "N/A",
       };
     });
   }, []);
 
   // Extract unique persons and FMS names
   const persons = useMemo(() => {
-    const uniquePersons = [...new Set(enrichedTasks.map(task => task.personName))];
+    const uniquePersons = [
+      ...new Set(enrichedTasks.map((task) => task.personName)),
+    ];
     return uniquePersons.sort();
   }, [enrichedTasks]);
 
   const fmsNames = useMemo(() => {
-    const uniqueFMS = [...new Set(enrichedTasks.map(task => task.fmsName))];
+    const uniqueFMS = [...new Set(enrichedTasks.map((task) => task.fmsName))];
     return uniqueFMS.sort();
   }, [enrichedTasks]);
 
   // Filter tasks based on all criteria
   const filteredTasks = useMemo(() => {
-    return enrichedTasks.filter(task => {
-      const matchesSearch = 
+    return enrichedTasks.filter((task) => {
+      const matchesSearch =
         task.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         task.personName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         task.fmsName.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesPerson = personFilter === 'all' || task.personName === personFilter;
-      const matchesFMS = fmsFilter === 'all' || task.fmsName === fmsFilter;
-      
+
+      const matchesPerson =
+        personFilter === "all" || task.personName === personFilter;
+      const matchesFMS = fmsFilter === "all" || task.fmsName === fmsFilter;
+
       return matchesSearch && matchesPerson && matchesFMS;
     });
   }, [enrichedTasks, searchQuery, personFilter, fmsFilter]);
@@ -223,7 +234,7 @@ const AdminTodayTasks = () => {
                 className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
               />
             </div>
-            
+
             {/* Person Filter */}
             <div className="w-full md:w-56">
               <select
@@ -232,8 +243,10 @@ const AdminTodayTasks = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500 appearance-none bg-white"
               >
                 <option value="all">All Persons</option>
-                {persons.map(person => (
-                  <option key={person} value={person}>{person}</option>
+                {persons.map((person) => (
+                  <option key={person} value={person}>
+                    {person}
+                  </option>
                 ))}
               </select>
             </div>
@@ -246,8 +259,10 @@ const AdminTodayTasks = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500 appearance-none bg-white"
               >
                 <option value="all">All FMS Names</option>
-                {fmsNames.map(fms => (
-                  <option key={fms} value={fms}>{fms}</option>
+                {fmsNames.map((fms) => (
+                  <option key={fms} value={fms}>
+                    {fms}
+                  </option>
                 ))}
               </select>
             </div>
@@ -260,50 +275,89 @@ const AdminTodayTasks = () => {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Persons</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Persons
+                </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {personFilter === 'all' 
-                    ? persons.length 
-                    : 1
-                  }
+                  {personFilter === "all" ? persons.length : 1}
                 </p>
               </div>
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <svg
+                  className="w-5 h-5 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
                 </svg>
               </div>
             </div>
           </div>
 
-        {/* Total FMS Names Card */}
-<div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-  <div className="flex items-center justify-between">
-    <div>
-      <p className="text-sm font-medium text-gray-600">Total FMS Names</p>
-      <p className="text-2xl font-bold text-gray-900 mt-1">
-        {[...new Set(filteredTasks.map(task => task.fmsName))].length}
-      </p>
-    </div>
-    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-    </div>
-  </div>
-</div>
+          {/* Total FMS Names Card */}
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Total FMS Names
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {
+                    [...new Set(filteredTasks.map((task) => task.fmsName))]
+                      .length
+                  }
+                </p>
+              </div>
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
           {/* Total Task Names Card */}
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Task Names</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Task Names
+                </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {[...new Set(filteredTasks.map(task => task.taskName))].length}
+                  {
+                    [...new Set(filteredTasks.map((task) => task.taskName))]
+                      .length
+                  }
                 </p>
               </div>
               <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                <svg
+                  className="w-5 h-5 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
                 </svg>
               </div>
             </div>
@@ -313,14 +367,29 @@ const AdminTodayTasks = () => {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Today's Total Tasks</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Today's Total Tasks
+                </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {filteredTasks.reduce((total, task) => total + task.todayTaskCount, 0)}
+                  {filteredTasks.reduce(
+                    (total, task) => total + task.todayTaskCount,
+                    0
+                  )}
                 </p>
               </div>
               <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 text-orange-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -356,16 +425,18 @@ const AdminTodayTasks = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredTasks.map(task => (
+                    {filteredTasks.map((task) => (
                       <tr key={task.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <img 
-                              src={task.personImage} 
+                            <img
+                              src={task.personImage}
                               alt={task.personName}
                               className="w-8 h-8 rounded-full object-cover mr-3"
                             />
-                            <span className="text-sm text-gray-900">{task.personName}</span>
+                            <span className="text-sm text-gray-900">
+                              {task.personName}
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -385,34 +456,48 @@ const AdminTodayTasks = () => {
 
               {/* Mobile Card View */}
               <div className="md:hidden divide-y divide-gray-200">
-                {filteredTasks.map(task => (
+                {filteredTasks.map((task) => (
                   <div key={task.id} className="p-4 hover:bg-gray-50">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center flex-1">
-                        <img 
-                          src={task.personImage} 
+                        <img
+                          src={task.personImage}
                           alt={task.personName}
                           className="w-10 h-10 rounded-full object-cover mr-3"
                         />
                         <div className="flex-1">
-                          <div className="text-xs text-gray-500 mb-1">Link with Name</div>
-                          <div className="text-sm font-medium text-gray-900">{task.personName}</div>
+                          <div className="text-xs text-gray-500 mb-1">
+                            Link with Name
+                          </div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {task.personName}
+                          </div>
                         </div>
                       </div>
                       <div className="ml-4 text-right">
-                        <div className="text-xs text-gray-500 mb-1">Today Task</div>
-                        <div className="text-lg font-semibold text-gray-900">{task.todayTaskCount}</div>
+                        <div className="text-xs text-gray-500 mb-1">
+                          Today Task
+                        </div>
+                        <div className="text-lg font-semibold text-gray-900">
+                          {task.todayTaskCount}
+                        </div>
                       </div>
                     </div>
-                    
+
                     <div className="mb-2">
                       <div className="text-xs text-gray-500 mb-1">FMS Name</div>
-                      <div className="text-sm text-gray-900">{task.fmsName}</div>
+                      <div className="text-sm text-gray-900">
+                        {task.fmsName}
+                      </div>
                     </div>
-                    
+
                     <div>
-                      <div className="text-xs text-gray-500 mb-1">Task Name</div>
-                      <div className="text-sm text-gray-900">{task.taskName}</div>
+                      <div className="text-xs text-gray-500 mb-1">
+                        Task Name
+                      </div>
+                      <div className="text-sm text-gray-900">
+                        {task.taskName}
+                      </div>
                     </div>
                   </div>
                 ))}

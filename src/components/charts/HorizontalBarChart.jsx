@@ -1,149 +1,39 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-const HorizontalBarChart = ({
-  data,
-  labels,
-  title,
-  colors = ['#ef4444', '#f87171', '#fca5a5', '#fecaca', '#fee2e2'],
-  maxValue = 10
-}) => {
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        data,
-        backgroundColor: data.map((_, index) => colors[index % colors.length]),
-        borderWidth: 0,
-        borderRadius: 6,
-        borderSkipped: false,
-        maxBarThickness: 24,
-        minBarLength: 6
-      }
-    ]
-  };
-
-  const options = {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      title: {
-        display: !!title,
-        text: title || '',
-        font: {
-          size: 16,
-          weight: '600',
-          family: "'Inter', sans-serif"
-        },
-        color: '#1F2937',
-        padding: {
-          bottom: 20
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(17, 24, 39, 0.95)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        padding: 12,
-        boxPadding: 8,
-        titleFont: {
-          size: 14,
-          weight: '600',
-          family: "'Inter', sans-serif"
-        },
-        bodyFont: {
-          size: 13,
-          family: "'Inter', sans-serif"
-        },
-        callbacks: {
-          label: function(context) {
-            return `Tasks: ${context.raw}`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-        max: maxValue,
-        grid: {
-          display: false
-        },
-        ticks: {
-          stepSize: 2,
-          font: {
-            size: 12,
-            family: "'Inter', sans-serif"
-          },
-          color: '#64748B'
-        },
-        border: {
-          display: false
-        }
-      },
-      y: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          font: {
-            size: 12,
-            family: "'Inter', sans-serif"
-          },
-          color: '#64748B'
-        },
-        border: {
-          display: false
-        }
-      }
-    },
-    animation: {
-      duration: 1000,
-      easing: 'easeInOutQuart'
-    }
-  };
-
+const HorizontalBarChart = ({ data, labels, colors, maxValue }) => {
   return (
-    <div className="relative bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-      {title && (
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
-      )}
-      <div className="h-64">
-        <Bar data={chartData} options={options} />
+    <div className="w-full h-full">
+      <div className="flex flex-col space-y-1 md:space-y-2 lg:space-y-3 h-full justify-center">
+        {data.map((value, index) => (
+          <div key={index} className="flex items-center space-x-1 md:space-x-2 lg:space-x-3">
+            {/* Label */}
+            <div className="w-16 md:w-20 lg:w-24 text-xs text-gray-600 truncate">
+              {labels[index]}
+            </div>
+            
+            {/* Bar Container */}
+            <div className="flex-1 bg-gray-100 rounded-full h-3 md:h-4 lg:h-5 overflow-hidden">
+              {/* Bar */}
+              <div
+                className="h-full rounded-full transition-all duration-500 ease-out"
+                style={{
+                  width: `${(value / maxValue) * 100}%`,
+                  backgroundColor: colors[index % colors.length],
+                }}
+              />
+            </div>
+            
+            {/* Value */}
+            <div className="w-6 md:w-8 text-right">
+              <span className="text-xs font-semibold text-gray-700">
+                {value}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
-};
-
-HorizontalBarChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  title: PropTypes.string,
-  colors: PropTypes.arrayOf(PropTypes.string),
-  maxValue: PropTypes.number
 };
 
 export default HorizontalBarChart;

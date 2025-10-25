@@ -1,148 +1,40 @@
+// components/charts/VerticalBarChart.jsx
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-const VerticalBarChart = ({
-  data,
-  labels,
-  title,
-  colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe'],
-  maxValue = 100
-}) => {
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        data,
-        backgroundColor: data.map((_, index) => colors[index % colors.length]),
-        borderWidth: 0,
-        borderRadius: 6,
-        borderSkipped: false,
-        maxBarThickness: 40,
-        minBarLength: 6
-      }
-    ]
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      title: {
-        display: !!title,
-        text: title || '',
-        font: {
-          size: 16,
-          weight: '600',
-          family: "'Inter', sans-serif"
-        },
-        color: '#1F2937',
-        padding: {
-          bottom: 20
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(17, 24, 39, 0.95)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        padding: 12,
-        boxPadding: 8,
-        titleFont: {
-          size: 14,
-          weight: '600',
-          family: "'Inter', sans-serif"
-        },
-        bodyFont: {
-          size: 13,
-          family: "'Inter', sans-serif"
-        },
-        callbacks: {
-          label: function(context) {
-            return `Score: ${context.raw}`;
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: maxValue,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
-          drawBorder: false
-        },
-        ticks: {
-          font: {
-            size: 12,
-            family: "'Inter', sans-serif"
-          },
-          color: '#64748B'
-        },
-        border: {
-          display: false
-        }
-      },
-      x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          font: {
-            size: 12,
-            family: "'Inter', sans-serif"
-          },
-          color: '#64748B'
-        },
-        border: {
-          display: false
-        }
-      }
-    },
-    animation: {
-      duration: 1000,
-      easing: 'easeInOutQuart'
-    }
-  };
-
+const VerticalBarChart = ({ data, labels, colors, maxValue }) => {
   return (
-    <div className="relative bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-      {title && (
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
-      )}
-      <div className="h-64">
-        <Bar data={chartData} options={options} />
+    <div className="w-full h-full">
+      <div className="flex items-end justify-between h-full px-1 md:px-2 space-x-1 md:space-x-2">
+        {data.map((value, index) => (
+          <div key={index} className="flex flex-col items-center flex-1 h-full">
+            {/* Value above bar */}
+            <div className="mb-1 h-6 flex items-end">
+              <span className="text-xs font-semibold text-gray-700">
+                {value}%
+              </span>
+            </div>
+            
+            {/* Bar */}
+            <div 
+              className="w-full rounded-t transition-all duration-500 ease-out relative"
+              style={{
+                height: `${(value / maxValue) * 70}%`,
+                backgroundColor: colors[index % colors.length],
+                minHeight: '20px'
+              }}
+            />
+            
+            {/* Label */}
+            <div className="mt-2 h-10 flex items-start">
+              <span className="text-xs text-gray-600 text-center break-words leading-tight px-0.5 md:px-1">
+                {labels[index]}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
-};
-
-VerticalBarChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  title: PropTypes.string,
-  colors: PropTypes.arrayOf(PropTypes.string),
-  maxValue: PropTypes.number
 };
 
 export default VerticalBarChart;

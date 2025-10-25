@@ -1,85 +1,77 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js';
 
-// Ensure Chart.js components are registered
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-const HalfCircleChart = ({
-  data,
-  labels,
-  colors = [
-    '#8DD9D5',  // Light teal for Admin User
-    '#6BBBEA',  // Light blue for Sarah Johnson
-    '#BEA1E8',  // Light purple for Jessica Miller
-    '#FFB77D',  // Light orange for Emily Wilson
-    '#FF99A8'   // Light pink for John Smith
-  ]
-}) => {
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        data,
-        backgroundColor: colors.slice(0, data.length),
-        borderColor: 'white',
-        borderWidth: 2,
-        hoverOffset: 10
-      }
-    ]
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '70%',
-    circumference: 180,
-    rotation: -90,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom',
-        labels: {
-          usePointStyle: true,
-          padding: 20,
-          font: {
-            family: 'Arial, sans-serif',
-            size: 12
-          },
-          color: '#333'
-        }
-      },
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          label: (context) => {
-            const value = context.parsed;
-            return `${context.label}: ${value}%`;
-          }
-        }
-      }
-    }
-  };
+const HalfCircleChart = ({ data, labels, colors }) => {
+  const total = data.reduce((sum, value) => sum + value, 0);
+  let currentAngle = -180;
 
   return (
-    <div className="relative w-full h-full">
-      <div className="h-64">
-        <Doughnut data={chartData} options={options} />
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      {/* Chart Container */}
+      <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48">
+        <svg
+          viewBox="0 0 100 50"
+          className="w-full h-full"
+        >
+          {data.map((value, index) => {
+            const percentage = (value / total) * 100;
+            const angle = (percentage / 100) * 180;
+            const startAngle = currentAngle;
+            const endAngle = currentAngle + angle;
+            currentAngle = endAngle;
+
+            // Calculate arc path
+            const startRad = (startAngle * Math.PI) / 180;
+            const endRad = (endAngle * Math.PI) / 180;
+            const x1 = 50 + 40 * Math.cos(startRad);
+            const y1 = 50 + 40 * Math.sin(startRad);
+            const x2 = 50 + 40 * Math.cos(endRad);
+            const y2 = 50 + 40 * Math.sin(endRad);
+            const largeArcFlag = angle > 180 ? 1 : 0;
+
+            const pathData = [
+              `M 50 50`,
+              `L ${x1} ${y1}`,
+              `A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+              `Z`
+            ].join(' ');
+
+            return (
+              <path
+                key={index}
+                d={pathData}
+                fill={colors[index % colors.length]}
+                stroke="white"
+                strokeWidth="1"
+              />
+            );
+          })}
+        </svg>
+        
+        {/* Center Text */}
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-center">
+          <div className="text-xs md:text-sm font-semibold text-gray-700">Top 5</div>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="mt-2 md:mt-4 w-full max-w-xs">
+        <div className="grid grid-cols-1 gap-1 md:gap-2">
+          {labels.map((label, index) => (
+            <div key={index} className="flex items-center space-x-2 text-xs">
+              <div
+                className="w-3 h-3 rounded flex-shrink-0"
+                style={{ backgroundColor: colors[index % colors.length] }}
+              />
+              <span className="text-gray-600 truncate flex-1">{label}</span>
+              <span className="text-gray-800 font-semibold flex-shrink-0">
+                {data[index]}%
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-};
-
-HalfCircleChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  colors: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default HalfCircleChart;

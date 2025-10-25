@@ -187,7 +187,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="space-y-4 lg:space-y-6 p-2 md:p-0">
+    <div className="space-y-4 lg:space-y-6 p-2 md:p-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <h1 className="text-lg md:text-2xl font-bold text-gray-800">Admin Dashboard</h1>
@@ -390,351 +390,234 @@ const AdminDashboard = () => {
           </table>
         </div>
 
-        {/* Mobile View */}
-        <div className="md:hidden divide-y divide-gray-200">
-          <div className="px-3 py-3 bg-gray-50 flex items-center gap-3">
+        {/* Mobile View - Fixed */}
+        <div className="md:hidden">
+          <div className="px-3 py-3 bg-gray-50 flex items-center gap-3 border-b border-gray-200 sticky top-0 z-10">
             <input
               type="checkbox"
               checked={selectAll}
               onChange={handleSelectAll}
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-medium text-gray-700">Select All</span>
+            <span className="text-sm font-medium text-gray-700">Select All ({filteredEmployees.length})</span>
           </div>
-          {filteredEmployees.map((employee) => (
-            <div key={employee.id} className={`${selectedEmployees.includes(employee.id) ? 'bg-blue-50' : ''}`}>
-              <div className="p-3 border-b border-gray-100">
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={selectedEmployees.includes(employee.id)}
-                    onChange={() => handleEmployeeSelect(employee.id)}
-                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div 
-                      className="flex items-center gap-2 cursor-pointer"
-                      onClick={() => handleRowClick(employee)}
+          
+          <div className="max-h-[60vh] overflow-y-auto">
+            {filteredEmployees.map((employee) => (
+              <div key={employee.id} className={`border-b border-gray-200 ${selectedEmployees.includes(employee.id) ? 'bg-blue-50' : ''}`}>
+                <div className="p-3">
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedEmployees.includes(employee.id)}
+                      onChange={() => handleEmployeeSelect(employee.id)}
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1 flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div 
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => handleRowClick(employee)}
+                      >
+                        <img 
+                          className="h-10 w-10 rounded-full object-cover flex-shrink-0" 
+                          src={employee.image} 
+                          alt={employee.name} 
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-medium text-gray-900 truncate">{employee.name}</div>
+                          <div className="text-xs text-gray-500 truncate">{employee.department}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Quick Stats */}
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Target:</span>
+                          <span className="font-semibold">{employee.target}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Actual:</span>
+                          <span className="font-semibold">{employee.actualWorkDone}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Pending:</span>
+                          <span className={`font-semibold ${
+                            employee.weekPending > 3 ? 'text-red-600' : 
+                            employee.weekPending > 1 ? 'text-yellow-600' : 
+                            'text-green-600'
+                          }`}>
+                            {employee.weekPending}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Commitment:</span>
+                          <span className="font-semibold">{employee.commitment}%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setExpandedEmployee(expandedEmployee === employee.id ? null : employee.id)}
+                      className="p-2 hover:bg-gray-200 rounded flex-shrink-0"
                     >
-                      <img 
-                        className="h-8 w-8 rounded-full object-cover" 
-                        src={employee.image} 
-                        alt={employee.name} 
-                      />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{employee.name}</div>
-                        <div className="text-xs text-gray-500">{employee.department}</div>
-                      </div>
-                    </div>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${expandedEmployee === employee.id ? 'rotate-180' : ''}`} />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setExpandedEmployee(expandedEmployee === employee.id ? null : employee.id)}
-                    className="p-1 hover:bg-gray-200 rounded"
-                  >
-                    <ChevronDown className={`w-4 h-4 transition-transform ${expandedEmployee === employee.id ? 'rotate-180' : ''}`} />
-                  </button>
+
+                  {/* Expanded Content */}
+                  {expandedEmployee === employee.id && (
+                    <div className="mt-3 space-y-3 border-t border-gray-200 pt-3">
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="bg-gray-50 p-2 rounded">
+                          <p className="text-gray-500">Weekly Done</p>
+                          <p className="font-semibold text-gray-900">{employee.weeklyWorkDone}%</p>
+                        </div>
+                        <div className="bg-gray-50 p-2 rounded">
+                          <p className="text-gray-500">On Time</p>
+                          <p className="font-semibold text-gray-900">{employee.weeklyWorkDoneOnTime}%</p>
+                        </div>
+                        <div className="bg-gray-50 p-2 rounded">
+                          <p className="text-gray-500">Total Work</p>
+                          <p className="font-semibold text-gray-900">{employee.totalWorkDone}%</p>
+                        </div>
+                        <div className="bg-gray-50 p-2 rounded">
+                          <p className="text-gray-500">All Pending</p>
+                          <p className="font-semibold text-gray-900">{employee.allPendingTillDate}</p>
+                        </div>
+                      </div>
+
+                      {selectedEmployees.includes(employee.id) && (
+                        <div className="bg-blue-50 p-3 rounded border border-blue-200 space-y-3">
+                          <p className="text-xs font-semibold text-blue-900">Next Week Inputs</p>
+                          <div className="space-y-2">
+                            <div>
+                              <label className="text-xs text-gray-600 block mb-1">Work Not Done %</label>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={employeeCommitments[employee.id]?.nextWeekPlannedWorkNotDone || 0}
+                                onChange={(e) => handleCommitmentChange(employee.id, 'nextWeekPlannedWorkNotDone', e.target.value)}
+                                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 block mb-1">Work Not Done On Time %</label>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={employeeCommitments[employee.id]?.nextWeekPlannedWorkNotDoneOnTime || 0}
+                                onChange={(e) => handleCommitmentChange(employee.id, 'nextWeekPlannedWorkNotDoneOnTime', e.target.value)}
+                                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 block mb-1">Commitment %</label>
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={employeeCommitments[employee.id]?.commitment || 0}
+                                onChange={(e) => handleCommitmentChange(employee.id, 'commitment', e.target.value)}
+                                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-
-                {/* Expanded Content */}
-                {expandedEmployee === employee.id && (
-                  <div className="mt-4 space-y-3 border-t border-gray-200 pt-3">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div>
-                        <p className="text-gray-500">Target</p>
-                        <p className="font-semibold text-gray-900">{employee.target}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Actual Work Done</p>
-                        <p className="font-semibold text-gray-900">{employee.actualWorkDone}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Weekly Work Done</p>
-                        <p className="font-semibold text-gray-900">{employee.weeklyWorkDone}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Weekly On Time</p>
-                        <p className="font-semibold text-gray-900">{employee.weeklyWorkDoneOnTime}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Total Work Done</p>
-                        <p className="font-semibold text-gray-900">{employee.totalWorkDone}%</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Week Pending</p>
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          employee.weekPending > 3 ? 'bg-red-100 text-red-800' : 
-                          employee.weekPending > 1 ? 'bg-yellow-100 text-yellow-800' : 
-                          'bg-green-100 text-green-800'
-                        }`}>
-                          {employee.weekPending}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">All Pending</p>
-                        <p className="font-semibold text-gray-900">{employee.allPendingTillDate}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Commitment</p>
-                        <p className="font-semibold text-gray-900">{employee.commitment}%</p>
-                      </div>
-                    </div>
-
-                    {selectedEmployees.includes(employee.id) && (
-                      <div className="bg-blue-50 p-3 rounded border border-blue-200 space-y-2">
-                        <p className="text-xs font-semibold text-blue-900">Next Week Inputs</p>
-                        <div>
-                          <label className="text-xs text-gray-600">Work Not Done %</label>
-                          <input
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={employeeCommitments[employee.id]?.nextWeekPlannedWorkNotDone || 0}
-                            onChange={(e) => handleCommitmentChange(employee.id, 'nextWeekPlannedWorkNotDone', e.target.value)}
-                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs text-gray-600">Work Not Done On Time %</label>
-                          <input
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={employeeCommitments[employee.id]?.nextWeekPlannedWorkNotDoneOnTime || 0}
-                            onChange={(e) => handleCommitmentChange(employee.id, 'nextWeekPlannedWorkNotDoneOnTime', e.target.value)}
-                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs text-gray-600">Commitment %</label>
-                          <input
-                            type="number"
-                            min="0"
-                            max="100"
-                            value={employeeCommitments[employee.id]?.commitment || 0}
-                            onChange={(e) => handleCommitmentChange(employee.id, 'commitment', e.target.value)}
-                            className="w-full px-2 py-1 border border-gray-300 rounded text-sm mt-1"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* User Details Modal */}
+      {/* User Details Modal - Fixed for Mobile */}
       {selectedUserDetails && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 md:p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
                 <img 
-                  className="h-12 w-12 rounded-full object-cover" 
+                  className="h-10 w-10 rounded-full object-cover flex-shrink-0" 
                   src={selectedUserDetails.image} 
                   alt={selectedUserDetails.name} 
                 />
-                <div>
-                  <h2 className="text-lg md:text-xl font-bold text-gray-900">{selectedUserDetails.name}</h2>
-                  <p className="text-sm text-gray-500">{selectedUserDetails.department}</p>
+                <div className="min-w-0">
+                  <h2 className="text-base font-bold text-gray-900 truncate">{selectedUserDetails.name}</h2>
+                  <p className="text-xs text-gray-500 truncate">{selectedUserDetails.department}</p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedUserDetails(null)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
               >
                 <X className="w-5 h-5 text-gray-600" />
               </button>
             </div>
 
-            {/* Details Content */}
-            <div className="p-4 md:p-6 space-y-6">
-              {/* Tasks Table */}
-              <div>
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Task Details</h3>
-                <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">FMS Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Task Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Target</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Actual Achievement</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">% Work Not Done</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">% Work Not Done On Time</th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">All Pending Till Date</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {selectedUserDetails.tasks && selectedUserDetails.tasks.length > 0 ? (
-                        selectedUserDetails.tasks.map((task, idx) => (
-                          <tr key={idx} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{task.fmsName}</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{task.taskName}</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">{task.target}</td>
-                            <td className="px-4 py-3 text-sm font-medium whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                task.actualAchievement < task.target ? 'bg-red-100 text-red-800' :
-                                task.actualAchievement === task.target ? 'bg-green-100 text-green-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
-                                {task.actualAchievement}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{task.workNotDone}%</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{task.workNotDoneOnTime}%</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{task.allPendingTillDate}</td>
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-4 space-y-4">
+                {/* Tasks Table */}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">Task Details</h3>
+                  <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                    <div className="min-w-[600px]">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">FMS Name</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Task Name</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Target</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Actual</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Not Done</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Late</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap">Pending</th>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="7" className="px-4 py-3 text-center text-sm text-gray-500">No tasks available</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {selectedUserDetails.tasks && selectedUserDetails.tasks.length > 0 ? (
+                            selectedUserDetails.tasks.map((task, idx) => (
+                              <tr key={idx} className="hover:bg-gray-50">
+                                <td className="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">{task.fmsName}</td>
+                                <td className="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">{task.taskName}</td>
+                                <td className="px-3 py-2 text-xs text-gray-900 font-medium whitespace-nowrap">{task.target}</td>
+                                <td className="px-3 py-2 text-xs font-medium whitespace-nowrap">
+                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                                    task.actualAchievement < task.target ? 'bg-red-100 text-red-800' :
+                                    task.actualAchievement === task.target ? 'bg-green-100 text-green-800' :
+                                    'bg-blue-100 text-blue-800'
+                                  }`}>
+                                    {task.actualAchievement}
+                                  </span>
+                                </td>
+                                <td className="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">{task.workNotDone}%</td>
+                                <td className="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">{task.workNotDoneOnTime}%</td>
+                                <td className="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">{task.allPendingTillDate}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="7" className="px-3 py-2 text-center text-xs text-gray-500">No tasks available</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {/* Overall Summary */}
-              {/* <div>
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Overall Summary</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <p className="text-xs text-blue-600 font-medium mb-1">Target</p>
-                    <p className="text-2xl font-bold text-blue-900">{selectedUserDetails.target}%</p>
-                  </div>
-                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <p className="text-xs text-green-600 font-medium mb-1">Actual Work Done</p>
-                    <p className="text-2xl font-bold text-green-900">{selectedUserDetails.actualWorkDone}%</p>
-                  </div>
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <p className="text-xs text-purple-600 font-medium mb-1">Total Work Done</p>
-                    <p className="text-2xl font-bold text-purple-900">{selectedUserDetails.totalWorkDone}%</p>
-                  </div>
-                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                    <p className="text-xs text-orange-600 font-medium mb-1">Commitment</p>
-                    <p className="text-2xl font-bold text-orange-900">{selectedUserDetails.commitment}%</p>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Weekly Metrics */}
-              {/* <div>
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Weekly Performance</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Weekly Work Done</p>
-                    <p className="text-xl font-bold text-gray-900">{selectedUserDetails.weeklyWorkDone}%</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">On Time %</p>
-                    <p className="text-xl font-bold text-gray-900">{selectedUserDetails.weeklyWorkDoneOnTime}%</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Week Pending</p>
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      selectedUserDetails.weekPending > 3 ? 'bg-red-100 text-red-800' : 
-                      selectedUserDetails.weekPending > 1 ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {selectedUserDetails.weekPending}
-                    </span>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Pending Tasks */}
-              {/* <div>
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Pending Tasks</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">All Pending Till Date</p>
-                    <p className="text-xl font-bold text-gray-900">{selectedUserDetails.allPendingTillDate}</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Planned % Not Done</p>
-                    <p className="text-xl font-bold text-gray-900">{selectedUserDetails.plannedWorkNotDone}%</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Not Done On Time %</p>
-                    <p className="text-xl font-bold text-gray-900">{selectedUserDetails.plannedWorkNotDoneOnTime}%</p>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Additional Info */}
-              {/* <div>
-                <h3 className="text-base font-semibold text-gray-900 mb-4">Additional Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Department</p>
-                    <p className="text-sm font-semibold text-gray-900">{selectedUserDetails.department}</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">HR Name</p>
-                    <p className="text-sm font-semibold text-gray-900">{selectedUserDetails.hrName || 'N/A'}</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Score</p>
-                    <p className="text-sm font-semibold text-gray-900">{selectedUserDetails.score || 'N/A'}</p>
-                  </div>
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <p className="text-xs text-gray-600 font-medium mb-2">Employee ID</p>
-                    <p className="text-sm font-semibold text-gray-900">{selectedUserDetails.id}</p>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Commitment Inputs */}
-              {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 md:p-6">
-                <h3 className="text-base font-semibold text-blue-900 mb-4">Next Week Commitments</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-blue-700 mb-2">Planned % Work Not Done</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={employeeCommitments[selectedUserDetails.id]?.nextWeekPlannedWorkNotDone || 0}
-                      onChange={(e) => handleCommitmentChange(selectedUserDetails.id, 'nextWeekPlannedWorkNotDone', e.target.value)}
-                      className="w-full px-3 py-2 border border-blue-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-blue-700 mb-2">Work Not Done On Time %</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={employeeCommitments[selectedUserDetails.id]?.nextWeekPlannedWorkNotDoneOnTime || 0}
-                      onChange={(e) => handleCommitmentChange(selectedUserDetails.id, 'nextWeekPlannedWorkNotDoneOnTime', e.target.value)}
-                      className="w-full px-3 py-2 border border-blue-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-blue-700 mb-2">Commitment %</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={employeeCommitments[selectedUserDetails.id]?.commitment || 0}
-                      onChange={(e) => handleCommitmentChange(selectedUserDetails.id, 'commitment', e.target.value)}
-                      className="w-full px-3 py-2 border border-blue-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div> */}
             </div>
 
             {/* Footer */}
-            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-4 md:p-6 flex justify-end gap-3">
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-3 flex justify-end gap-2 flex-shrink-0">
               <button
                 onClick={() => setSelectedUserDetails(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                className="px-3 py-2 border border-gray-300 rounded text-xs font-medium text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 Close
               </button>
@@ -742,66 +625,65 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-      
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-6">
-        {/* Top 5 Scorers */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Top 5 Scorers</h2>
-          <div className="h-48 md:h-64">
-            <HalfCircleChart 
-              data={topScorersData} 
-              labels={topScorersLabels}
-              colors={[
-                '#8DD9D5',
-                '#6BBBEA',
-                '#BEA1E8',
-                '#FFB77D',
-                '#FF99A8'
-              ]}
-            />
-          </div>
-        </div>
-        
-        {/* Pending Tasks */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Pending Tasks by User</h2>
-          <div className="h-48 md:h-64">
-            <HorizontalBarChart 
-              data={pendingTasksData} 
-              labels={pendingTasksLabels}
-              colors={['#ef4444', '#f87171', '#fca5a5', '#fecaca', '#fee2e2']}
-              maxValue={Math.max(...pendingTasksData) + 1}
-            />
-          </div>
-        </div>
-        
-        {/* Lowest Scores */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Lowest Scores</h2>
-          <div className="h-48 md:h-64">
-            <VerticalBarChart 
-              data={lowestScorersData} 
-              labels={lowestScorersLabels}
-              colors={['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a', '#fef3c7']}
-              maxValue={100}
-            />
-          </div>
-        </div>
-      </div>
-      
-      {/* Department Scores */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
-        <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">Department Scores</h2>
-        <div className="h-48 md:h-80">
-          <VerticalBarChart 
-            data={departmentScoresData} 
-            labels={departmentScoresLabels}
-            colors={['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe']}
-            maxValue={100}
-          />
-        </div>
-      </div>
+  {/* Charts Grid - Fixed for Mobile */}
+<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
+  {/* Top 5 Scorers */}
+  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
+    <h2 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 md:mb-3">Top 5 Scorers</h2>
+    <div className="h-40 md:h-48 lg:h-56 overflow-hidden">
+      <HalfCircleChart 
+        data={topScorersData} 
+        labels={topScorersLabels}
+        colors={[
+          '#8DD9D5',
+          '#6BBBEA',
+          '#BEA1E8',
+          '#FFB77D',
+          '#FF99A8'
+        ]}
+      />
+    </div>
+  </div>
+  
+  {/* Pending Tasks */}
+  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
+    <h2 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 md:mb-3">Pending Tasks by User</h2>
+    <div className="h-40 md:h-48 lg:h-56 overflow-hidden">
+      <HorizontalBarChart 
+        data={pendingTasksData} 
+        labels={pendingTasksLabels}
+        colors={['#ef4444', '#f87171', '#fca5a5', '#fecaca', '#fee2e2']}
+        maxValue={Math.max(...pendingTasksData) + 1}
+      />
+    </div>
+  </div>
+  
+  {/* Lowest Scores */}
+  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
+    <h2 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 md:mb-3">Lowest Scores</h2>
+    <div className="h-40 md:h-48 lg:h-56 overflow-hidden">
+      <VerticalBarChart 
+        data={lowestScorersData} 
+        labels={lowestScorersLabels}
+        colors={['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a', '#fef3c7']}
+        maxValue={100}
+      />
+    </div>
+  </div>
+</div>
+
+{/* Department Scores */}
+<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
+  <h2 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 md:mb-3">Department Scores</h2>
+  <div className="h-48 md:h-56 lg:h-64 overflow-hidden">
+    <VerticalBarChart 
+      data={departmentScoresData} 
+      labels={departmentScoresLabels}
+      colors={['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe']}
+      maxValue={100}
+    />
+  </div>
+</div>
     </div>
   );
 };
