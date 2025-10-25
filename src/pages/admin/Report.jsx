@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Filter, Search, Calendar, ChevronDown } from 'lucide-react';
-import { employees, tasks, departments } from '../../data/mockData';
+import React, { useState, useEffect } from "react";
+import { Filter, Search, Calendar, ChevronDown } from "lucide-react";
+import { employees, tasks, departments } from "../../data/mockData";
 
 const Report = () => {
-  const [filterName, setFilterName] = useState('');
-  const [filterDepartment, setFilterDepartment] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [filterName, setFilterName] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [uniqueDepartments, setUniqueDepartments] = useState([]);
   const [uniqueNames, setUniqueNames] = useState([]);
@@ -14,13 +14,13 @@ const Report = () => {
 
   useEffect(() => {
     // Get unique departments
-    const depts = [...new Set(employees.map(emp => emp.department))];
+    const depts = [...new Set(employees.map((emp) => emp.department))];
     setUniqueDepartments(depts);
-    
+
     // Get unique employee names
-    const names = [...new Set(employees.map(emp => emp.name))];
+    const names = [...new Set(employees.map((emp) => emp.name))];
     setUniqueNames(names);
-    
+
     // Initialize with all data
     applyFilters();
   }, []);
@@ -30,43 +30,39 @@ const Report = () => {
 
     // Filter by name
     if (filterName) {
-      filteredTasks = filteredTasks.filter(task => 
+      filteredTasks = filteredTasks.filter((task) =>
         task.personName.toLowerCase().includes(filterName.toLowerCase())
       );
     }
 
     // Filter by department
     if (filterDepartment) {
-      const departmentEmployees = employees.filter(emp => 
-        emp.department === filterDepartment
-      ).map(emp => emp.id);
-      
-      filteredTasks = filteredTasks.filter(task => 
+      const departmentEmployees = employees
+        .filter((emp) => emp.department === filterDepartment)
+        .map((emp) => emp.id);
+
+      filteredTasks = filteredTasks.filter((task) =>
         departmentEmployees.includes(task.assignedTo)
       );
     }
 
     // Filter by date range
     if (startDate) {
-      filteredTasks = filteredTasks.filter(task => 
-        task.dueDate >= startDate
-      );
+      filteredTasks = filteredTasks.filter((task) => task.dueDate >= startDate);
     }
 
     if (endDate) {
-      filteredTasks = filteredTasks.filter(task => 
-        task.dueDate <= endDate
-      );
+      filteredTasks = filteredTasks.filter((task) => task.dueDate <= endDate);
     }
 
     setFilteredData(filteredTasks);
   };
 
   const clearFilters = () => {
-    setFilterName('');
-    setFilterDepartment('');
-    setStartDate('');
-    setEndDate('');
+    setFilterName("");
+    setFilterDepartment("");
+    setStartDate("");
+    setEndDate("");
     setFilteredData(tasks);
   };
 
@@ -77,7 +73,7 @@ const Report = () => {
 
   // Calculate metrics for each task
   const getTaskMetrics = (task) => {
-    const employee = employees.find(emp => emp.id === task.assignedTo);
+    const employee = employees.find((emp) => emp.id === task.assignedTo);
     if (!employee) return null;
 
     return {
@@ -85,20 +81,28 @@ const Report = () => {
       totalAchievement: employee.actualWorkDone,
       workDonePercentage: employee.totalWorkDone,
       workDoneOnTimePercentage: employee.weeklyWorkDoneOnTime,
-      allPendingTillDate: employee.allPendingTillDate
+      allPendingTillDate: employee.allPendingTillDate,
     };
   };
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      'completed': { color: 'bg-green-100 text-green-800', label: 'Completed' },
-      'in-progress': { color: 'bg-blue-100 text-blue-800', label: 'In Progress' },
-      'pending': { color: 'bg-yellow-100 text-yellow-800', label: 'Pending' }
+      completed: { color: "bg-green-100 text-green-800", label: "Completed" },
+      "in-progress": {
+        color: "bg-blue-100 text-blue-800",
+        label: "In Progress",
+      },
+      pending: { color: "bg-yellow-100 text-yellow-800", label: "Pending" },
     };
-    
-    const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', label: status };
+
+    const config = statusConfig[status] || {
+      color: "bg-gray-100 text-gray-800",
+      label: status,
+    };
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}
+      >
         {config.label}
       </span>
     );
@@ -106,14 +110,19 @@ const Report = () => {
 
   const getPriorityBadge = (priority) => {
     const priorityConfig = {
-      'high': { color: 'bg-red-100 text-red-800', label: 'High' },
-      'medium': { color: 'bg-yellow-100 text-yellow-800', label: 'Medium' },
-      'low': { color: 'bg-green-100 text-green-800', label: 'Low' }
+      high: { color: "bg-red-100 text-red-800", label: "High" },
+      medium: { color: "bg-yellow-100 text-yellow-800", label: "Medium" },
+      low: { color: "bg-green-100 text-green-800", label: "Low" },
     };
-    
-    const config = priorityConfig[priority] || { color: 'bg-gray-100 text-gray-800', label: priority };
+
+    const config = priorityConfig[priority] || {
+      color: "bg-gray-100 text-gray-800",
+      label: priority,
+    };
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}
+      >
         {config.label}
       </span>
     );
@@ -128,8 +137,13 @@ const Report = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Department Report</h1>
-          <p className="text-gray-600 mt-1">Comprehensive overview of all department tasks and performance metrics</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Department Report
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Comprehensive overview of all department tasks and performance
+            metrics
+          </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <Filter className="w-4 h-4" />
@@ -164,10 +178,16 @@ const Report = () => {
                 onClick={() => setIsNameDropdownOpen(!isNameDropdownOpen)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white flex items-center justify-between"
               >
-                <span className={filterName ? "text-gray-900" : "text-gray-500"}>
+                <span
+                  className={filterName ? "text-gray-900" : "text-gray-500"}
+                >
                   {filterName || "Select employee..."}
                 </span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isNameDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-400 transition-transform ${
+                    isNameDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
 
               {/* Dropdown Menu */}
@@ -175,7 +195,7 @@ const Report = () => {
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
                   <div className="py-1">
                     <button
-                      onClick={() => handleNameSelect('')}
+                      onClick={() => handleNameSelect("")}
                       className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 text-gray-700"
                     >
                       All Employees
@@ -211,8 +231,10 @@ const Report = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">All Departments</option>
-              {uniqueDepartments.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+              {uniqueDepartments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
               ))}
             </select>
           </div>
@@ -251,6 +273,161 @@ const Report = () => {
         </div>
       </div>
 
+    {/* Summary Cards */}
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3 mb-6">
+  {/* FMS Name Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">FMS Name</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {[...new Set(filteredData.map((task) => task.fmsName))].length}
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* Employee All Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">Employees</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {[...new Set(filteredData.map((task) => {
+            const employee = employees.find((emp) => emp.id === task.assignedTo);
+            return employee?.name;
+          }))].filter((name) => name).length}
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* Pending Till Date Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">Pending Tasks</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {filteredData.reduce((total, task) => {
+            const employee = employees.find((emp) => emp.id === task.assignedTo);
+            return total + (employee?.allPendingTillDate || 0);
+          }, 0)}
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-orange-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* Total Achievement Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">Achievement</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {filteredData.length > 0
+            ? Math.round(
+                filteredData.reduce((total, task) => {
+                  const employee = employees.find((emp) => emp.id === task.assignedTo);
+                  return total + (employee?.actualWorkDone || 0);
+                }, 0) / filteredData.length
+              )
+            : 0}%
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* % Work Done Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">Work Done</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {filteredData.length > 0
+            ? Math.round(
+                filteredData.reduce((total, task) => {
+                  const employee = employees.find((emp) => emp.id === task.assignedTo);
+                  return total + (employee?.totalWorkDone || 0);
+                }, 0) / filteredData.length
+              )
+            : 0}%
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* % Work Done On Time Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">On Time</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {filteredData.length > 0
+            ? Math.round(
+                filteredData.reduce((total, task) => {
+                  const employee = employees.find((emp) => emp.id === task.assignedTo);
+                  return total + (employee?.weeklyWorkDoneOnTime || 0);
+                }, 0) / filteredData.length
+              )
+            : 0}%
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-teal-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* Overall Delay Score Card */}
+  <div className="bg-white rounded-lg border border-gray-200 p-3">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs font-medium text-gray-600">Delay Score</p>
+        <p className="text-lg font-semibold text-gray-900 mt-1">
+          {filteredData.length > 0
+            ? 100 - Math.round(
+                filteredData.reduce((total, task) => {
+                  const employee = employees.find((emp) => emp.id === task.assignedTo);
+                  return total + (employee?.weeklyWorkDoneOnTime || 0);
+                }, 0) / filteredData.length
+              )
+            : 0}%
+        </p>
+      </div>
+      <div className="w-8 h-8 bg-red-50 rounded-full flex items-center justify-center">
+        <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
       {/* Table Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -286,9 +463,11 @@ const Report = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredData.length > 0 ? (
                 filteredData.map((task) => {
-                  const employee = employees.find(emp => emp.id === task.assignedTo);
+                  const employee = employees.find(
+                    (emp) => emp.id === task.assignedTo
+                  );
                   const metrics = getTaskMetrics(task);
-                  
+
                   if (!employee || !metrics) return null;
 
                   return (
@@ -299,18 +478,22 @@ const Report = () => {
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                         <div>
                           <div className="font-medium">{task.taskName}</div>
-                          <div className="text-gray-500 text-xs mt-1">{task.description}</div>
+                          <div className="text-gray-500 text-xs mt-1">
+                            {task.description}
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex items-center">
-                          <img 
-                            className="h-8 w-8 rounded-full object-cover mr-3" 
-                            src={employee.image} 
-                            alt={employee.name} 
+                          <img
+                            className="h-8 w-8 rounded-full object-cover mr-3"
+                            src={employee.image}
+                            alt={employee.name}
                           />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{employee.name}</div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {employee.name}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -320,46 +503,54 @@ const Report = () => {
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-center">
-                        <span className={`inline-flex items-center justify-center w-12 h-8 rounded-full text-sm font-semibold ${
-                          metrics.totalAchievement >= metrics.target 
-                            ? 'bg-green-100 text-green-800' 
-                            : metrics.totalAchievement >= metrics.target * 0.8 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center justify-center w-12 h-8 rounded-full text-sm font-semibold ${
+                            metrics.totalAchievement >= metrics.target
+                              ? "bg-green-100 text-green-800"
+                              : metrics.totalAchievement >= metrics.target * 0.8
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {metrics.totalAchievement}%
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-center">
-                        <span className={`inline-flex items-center justify-center w-16 h-8 rounded-full text-sm font-semibold ${
-                          metrics.workDonePercentage >= 90 
-                            ? 'bg-green-100 text-green-800' 
-                            : metrics.workDonePercentage >= 70 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center justify-center w-16 h-8 rounded-full text-sm font-semibold ${
+                            metrics.workDonePercentage >= 90
+                              ? "bg-green-100 text-green-800"
+                              : metrics.workDonePercentage >= 70
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {metrics.workDonePercentage}%
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-center">
-                        <span className={`inline-flex items-center justify-center w-16 h-8 rounded-full text-sm font-semibold ${
-                          metrics.workDoneOnTimePercentage >= 90 
-                            ? 'bg-green-100 text-green-800' 
-                            : metrics.workDoneOnTimePercentage >= 70 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center justify-center w-16 h-8 rounded-full text-sm font-semibold ${
+                            metrics.workDoneOnTimePercentage >= 90
+                              ? "bg-green-100 text-green-800"
+                              : metrics.workDoneOnTimePercentage >= 70
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {metrics.workDoneOnTimePercentage}%
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-center">
-                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${
-                          metrics.allPendingTillDate === 0 
-                            ? 'bg-green-100 text-green-800' 
-                            : metrics.allPendingTillDate <= 3 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${
+                            metrics.allPendingTillDate === 0
+                              ? "bg-green-100 text-green-800"
+                              : metrics.allPendingTillDate <= 3
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {metrics.allPendingTillDate}
                         </span>
                       </td>
@@ -368,11 +559,18 @@ const Report = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
+                  <td
+                    colSpan="8"
+                    className="px-4 py-8 text-center text-gray-500"
+                  >
                     <div className="flex flex-col items-center justify-center">
                       <Filter className="w-12 h-12 text-gray-300 mb-2" />
-                      <p className="text-lg font-medium text-gray-900">No tasks found</p>
-                      <p className="text-gray-500">Try adjusting your filters to see more results</p>
+                      <p className="text-lg font-medium text-gray-900">
+                        No tasks found
+                      </p>
+                      <p className="text-gray-500">
+                        Try adjusting your filters to see more results
+                      </p>
                     </div>
                   </td>
                 </tr>
