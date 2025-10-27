@@ -411,6 +411,9 @@ const AdminTodayTasks = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Employee ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Link with Name
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -427,6 +430,11 @@ const AdminTodayTasks = () => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredTasks.map((task) => (
                       <tr key={task.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {task.assignedTo}
+                          </div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
@@ -466,6 +474,9 @@ const AdminTodayTasks = () => {
                           className="w-10 h-10 rounded-full object-cover mr-3"
                         />
                         <div className="flex-1">
+                          <div className="text-xs text-gray-500 mb-1">
+                            ID: {task.assignedTo}
+                          </div>
                           <div className="text-xs text-gray-500 mb-1">
                             Link with Name
                           </div>

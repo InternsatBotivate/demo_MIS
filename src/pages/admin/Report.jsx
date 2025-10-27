@@ -268,49 +268,55 @@ const Report = () => {
     </div>
   </div>
 </div>
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7">
-  {/* FMS Name Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
+  {/* ====================  SUMMARY CARDS (WIDER, SAME HEIGHT)  ==================== */}
+<div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+  {/* ---- FMS Name Card ---- */}
+  <div className="w-full p-3 bg-white rounded-lg border border-gray-200">
     <div className="flex justify-between items-center">
-      <div>
+      <div className="flex-1">
         <p className="text-xs font-medium text-gray-600">FMS Name</p>
         <p className="mt-1 text-lg font-semibold text-gray-900">
           {[...new Set(filteredData.map((task) => task.fmsName))].length}
         </p>
       </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-blue-50 rounded-full">
-        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      <div className="flex justify-center items-center w-9 h-9 bg-blue-50 rounded-full ml-3">
+        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       </div>
     </div>
   </div>
 
-  {/* Employee All Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
+  {/* ---- Employees Card ---- */}
+  <div className="w-full p-3 bg-white rounded-lg border border-gray-200">
     <div className="flex justify-between items-center">
-      <div>
+      <div className="flex-1">
         <p className="text-xs font-medium text-gray-600">Employees</p>
         <p className="mt-1 text-lg font-semibold text-gray-900">
-          {[...new Set(filteredData.map((task) => {
-            const employee = employees.find((emp) => emp.id === task.assignedTo);
-            return employee?.name;
-          }))].filter((name) => name).length}
+          {[...new Set(
+            filteredData.map((task) => {
+              const employee = employees.find((emp) => emp.id === task.assignedTo);
+              return employee?.name;
+            })
+          )]
+            .filter((name) => name)
+            .length}
         </p>
       </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-green-50 rounded-full">
-        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <div className="flex justify-center items-center w-9 h-9 bg-green-50 rounded-full ml-3">
+        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       </div>
     </div>
   </div>
 
-  {/* Pending Till Date Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
+  {/* ---- Pending Tasks Card ---- */}
+  <div className="w-full p-3 bg-white rounded-lg border border-gray-200">
     <div className="flex justify-between items-center">
-      <div>
+      <div className="flex-1">
         <p className="text-xs font-medium text-gray-600">Pending Tasks</p>
         <p className="mt-1 text-lg font-semibold text-gray-900">
           {filteredData.reduce((total, task) => {
@@ -319,43 +325,20 @@ const Report = () => {
           }, 0)}
         </p>
       </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-orange-50 rounded-full">
-        <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div className="flex justify-center items-center w-9 h-9 bg-orange-50 rounded-full ml-3">
+        <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
     </div>
   </div>
 
-  {/* Total Achievement Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
+  {/* ---- Overall Score Card ---- */}
+  <div className="w-full p-3 bg-white rounded-lg border border-gray-200">
     <div className="flex justify-between items-center">
-      <div>
-        <p className="text-xs font-medium text-gray-600">Achievement</p>
-        <p className="mt-1 text-lg font-semibold text-gray-900">
-          {filteredData.length > 0
-            ? Math.round(
-                filteredData.reduce((total, task) => {
-                  const employee = employees.find((emp) => emp.id === task.assignedTo);
-                  return total + (employee?.actualWorkDone || 0);
-                }, 0) / filteredData.length
-              )
-            : 0}%
-        </p>
-      </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-purple-50 rounded-full">
-        <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  {/* % Work Done Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
-    <div className="flex justify-between items-center">
-      <div>
-        <p className="text-xs font-medium text-gray-600">Work Done</p>
+      <div className="flex-1">
+        <p className="text-xs font-medium text-gray-600">Overall Score</p>
         <p className="mt-1 text-lg font-semibold text-gray-900">
           {filteredData.length > 0
             ? Math.round(
@@ -367,46 +350,24 @@ const Report = () => {
             : 0}%
         </p>
       </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-indigo-50 rounded-full">
-        <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      <div className="flex justify-center items-center w-9 h-9 bg-indigo-50 rounded-full ml-3">
+        <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
       </div>
     </div>
   </div>
 
-  {/* % Work Done On Time Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
+  {/* ---- Delay Score Card ---- */}
+  <div className="w-full p-3 bg-white rounded-lg border border-gray-200">
     <div className="flex justify-between items-center">
-      <div>
-        <p className="text-xs font-medium text-gray-600">On Time</p>
-        <p className="mt-1 text-lg font-semibold text-gray-900">
-          {filteredData.length > 0
-            ? Math.round(
-                filteredData.reduce((total, task) => {
-                  const employee = employees.find((emp) => emp.id === task.assignedTo);
-                  return total + (employee?.weeklyWorkDoneOnTime || 0);
-                }, 0) / filteredData.length
-              )
-            : 0}%
-        </p>
-      </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-teal-50 rounded-full">
-        <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  {/* Overall Delay Score Card */}
-  <div className="p-2 bg-white rounded-lg border border-gray-200 md:p-3">
-    <div className="flex justify-between items-center">
-      <div>
+      <div className="flex-1">
         <p className="text-xs font-medium text-gray-600">Delay Score</p>
         <p className="mt-1 text-lg font-semibold text-gray-900">
           {filteredData.length > 0
-            ? 100 - Math.round(
+            ? 100 -
+              Math.round(
                 filteredData.reduce((total, task) => {
                   const employee = employees.find((emp) => emp.id === task.assignedTo);
                   return total + (employee?.weeklyWorkDoneOnTime || 0);
@@ -415,9 +376,10 @@ const Report = () => {
             : 0}%
         </p>
       </div>
-      <div className="flex justify-center items-center w-8 h-8 bg-red-50 rounded-full">
-        <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div className="flex justify-center items-center w-9 h-9 bg-red-50 rounded-full ml-3">
+        <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
     </div>
@@ -429,6 +391,9 @@ const Report = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase whitespace-nowrap md:px-4">
+                  Employee ID
+                </th>
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase whitespace-nowrap md:px-4">
                   FMS Name
                 </th>
@@ -467,6 +432,9 @@ const Report = () => {
 
                   return (
                     <tr key={task.id} className="hover:bg-gray-50">
+                      <td className="px-3 py-3 text-sm font-medium text-gray-900 whitespace-nowrap md:px-4">
+                        {employee.id}
+                      </td>
                       <td className="px-3 py-3 text-sm font-medium text-gray-900 whitespace-nowrap md:px-4">
                         {task.fmsName}
                       </td>
@@ -555,7 +523,7 @@ const Report = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="8"
+                    colSpan="9"
                     className="px-4 py-8 text-center text-gray-500"
                   >
                     <div className="flex flex-col justify-center items-center">
@@ -589,8 +557,11 @@ const Report = () => {
 
               return (
                 <div key={task.id} className="p-3 bg-white border border-gray-200 rounded-lg">
-                  {/* Header - FMS and Task */}
+                  {/* Header - Employee ID, FMS and Task */}
                   <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-600 mb-1">
+                      ID: {employee.id}
+                    </div>
                     <div className="text-xs font-medium text-blue-600 mb-1">
                       {task.fmsName}
                     </div>

@@ -245,6 +245,9 @@ const AdminHistoryCommitment = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                  Employee ID
+                </th>
+                <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Name
                 </th>
                 <th className="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -290,6 +293,11 @@ const AdminHistoryCommitment = () => {
 
                   return (
                     <tr key={idx} className="hover:bg-gray-50">
+                      <td className="px-3 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {record.employeeId}
+                        </div>
+                      </td>
                       <td className="px-3 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
                           {record.name}
@@ -379,7 +387,7 @@ const AdminHistoryCommitment = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="10"
+                    colSpan="11"
                     className="px-3 py-8 text-center text-gray-500"
                   >
                     <div className="flex flex-col gap-2 items-center">
@@ -412,6 +420,9 @@ const AdminHistoryCommitment = () => {
                 <div key={idx} className="p-4 bg-white transition-colors hover:bg-gray-50">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex flex-1 gap-3 items-center min-w-0">
+                      <div className="text-sm text-gray-600">
+                        ID: {record.employeeId}
+                      </div>
                       <div className="text-base font-semibold text-gray-900 truncate">{record.name}</div>
                       <span className="flex-shrink-0 text-sm text-gray-500">{record.department}</span>
                     </div>

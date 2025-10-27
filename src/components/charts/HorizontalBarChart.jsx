@@ -1,36 +1,53 @@
 import React from 'react';
+import './HorizontalBarChart.css';
 
 const HorizontalBarChart = ({ data, labels, colors, maxValue }) => {
   return (
-    <div className="w-full h-full">
-      <div className="flex flex-col space-y-1 md:space-y-2 lg:space-y-3 h-full justify-center">
-        {data.map((value, index) => (
-          <div key={index} className="flex items-center space-x-1 md:space-x-2 lg:space-x-3">
-            {/* Label */}
-            <div className="w-16 md:w-20 lg:w-24 text-xs text-gray-600 truncate">
-              {labels[index]}
-            </div>
-            
-            {/* Bar Container */}
-            <div className="flex-1 bg-gray-100 rounded-full h-3 md:h-4 lg:h-5 overflow-hidden">
-              {/* Bar */}
+    <div className="w-full h-full flex flex-col min-h-0">
+      {/* Fixed Header (optional – you can remove if not needed) */}
+      {/* <div className="pb-2 border-b border-gray-200 flex-shrink-0">
+        <p className="text-sm font-semibold text-gray-700">Performance Overview</p>
+      </div> */}
+
+      {/* Scrollable Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 horizontal-chart-scroll">
+        <div className="py-2">
+          <div className="space-y-3">
+            {data.map((value, index) => (
               <div
-                className="h-full rounded-full transition-all duration-500 ease-out"
-                style={{
-                  width: `${(value / maxValue) * 100}%`,
-                  backgroundColor: colors[index % colors.length],
-                }}
-              />
-            </div>
-            
-            {/* Value */}
-            <div className="w-6 md:w-8 text-right">
-              <span className="text-xs font-semibold text-gray-700">
-                {value}
-              </span>
-            </div>
+                key={index}
+                className="flex items-center space-x-3 px-1"
+              >
+                {/* Label – Flexible width to show full names */}
+                <div
+                  className="flex-shrink-0 text-sm font-medium text-gray-700 mr-3"
+                  style={{ minWidth: '150px', maxWidth: '40%' }}
+                  title={labels[index]}
+                >
+                  {labels[index]}
+                </div>
+
+                {/* Bar Container */}
+                <div className="flex-1 bg-gray-200 rounded-full h-5 md:h-6 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700 ease-out shadow-sm"
+                    style={{
+                      width: `${Math.min((value / maxValue) * 100, 100)}%`,
+                      backgroundColor: colors[index % colors.length],
+                    }}
+                  />
+                </div>
+
+                {/* Value */}
+                <div className="w-12 text-right flex-shrink-0">
+                  <span className="text-sm font-bold text-gray-800">
+                    {value}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
