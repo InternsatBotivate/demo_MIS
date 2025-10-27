@@ -387,7 +387,7 @@ const Report = () => {
 </div>
 {/* Desktop Table View */}
       <div className="hidden md:block">
-        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
